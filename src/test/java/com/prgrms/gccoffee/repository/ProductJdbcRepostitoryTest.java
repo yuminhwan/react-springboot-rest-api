@@ -91,4 +91,27 @@ class ProductJdbcRepostitoryTest {
         List<Product> product = productRepostitory.findByCategory(newProduct.getCategory());
         assertThat(product).isNotEmpty();
     }
+
+    @Test
+    @Order(5)
+    @DisplayName("상품을 수정할 수 있다.")
+    void testUpdate() {
+        newProduct.setProductName("updated-product");
+        productRepostitory.update(newProduct);
+        Optional<Product> product = productRepostitory.findById(newProduct.getProductId());
+
+        assertThat(product).isNotEmpty()
+            .get()
+            .usingRecursiveComparison()
+            .isEqualTo(newProduct);
+    }
+
+    @Test
+    @Order(6)
+    @DisplayName("상품을 전체 삭제한다.")
+    void testDeleteAll() {
+        productRepostitory.deleteAll();
+        List<Product> products = productRepostitory.findAll();
+        assertThat(products).isEmpty();
+    }
 }
